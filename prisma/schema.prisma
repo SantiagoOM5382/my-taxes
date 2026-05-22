@@ -1,0 +1,33 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Deuda {
+  id           Int      @id @default(autoincrement())
+  nombre       String
+  acreedor     String
+  categoria    String
+  montoInicial Float
+  montoActual  Float
+  notas        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  pagos        Pago[]
+}
+
+model Pago {
+  id        Int      @id @default(autoincrement())
+  deudaId   Int
+  monto     Float
+  nota      String?
+  createdAt DateTime @default(now())
+  deuda     Deuda    @relation(fields: [deudaId], references: [id], onDelete: Cascade)
+}
